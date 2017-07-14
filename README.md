@@ -2,8 +2,7 @@ See class header comments to understand the problem.
 
 #### How to build
 
- Fork this repository 
- Clone your forked repository to your local machine 
+ Fork this repository and clone it to your local machine 
 
     mvn clean install
     
