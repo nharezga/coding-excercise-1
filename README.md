@@ -1,12 +1,9 @@
 See class header comments to understand the problem. 
 
+#### How to build
 
-####What to do
-	Fork this repository
-	Clone your forked repository to your local machine
-	
-
-####How to build
+ Fork this repository 
+ Clone your forked repository to your local machine 
 
     mvn clean install
     
