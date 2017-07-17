@@ -41,7 +41,7 @@ public class Refrigerator {
 
     /**
      *
-     *  Create a new refrigerator by specifying shelSize and count for SMALL, MEDIUM, LARGE shelves
+     *  Create a new refrigerator by specifying shelfSize and count for SMALL, MEDIUM, LARGE shelves
      * @param largeShelfCount
      * @param largeShelfCuFt
      * @param mediumShelfCount
@@ -63,8 +63,8 @@ public class Refrigerator {
         this.mediumShelfCount = mediumShelfCount;
         this.mediumShelfCuFt = mediumShelfCuFt;
 
-        this.smallShelfCount = largeShelfCount;
-        this.smallShelfCuFt = largeShelfCuFt;
+        this.smallShelfCount = smallShelfCount;
+        this.smallShelfCuFt = smallShelfCuFt;
 
 
     }
@@ -76,7 +76,7 @@ public class Refrigerator {
      *
      * Return
      *      true if put is successful
-     *      false if put is not successful, for example, if you dont have enough space any shelf
+     *      false if put is not successful, for example, if you don't have enough space any shelf, even after re-arranging
      *
      *
      * @param item
@@ -87,7 +87,7 @@ public class Refrigerator {
 
 
     /**
-     * return item when someone requested for item.
+     * remove and return the requested item
      * Return null when not available
      * @param itemId
      * @return
@@ -102,7 +102,7 @@ public class Refrigerator {
      * Return current utilization of the space
      * @return
      */
-    public int getUtilizationPercentage() {
+    public float getUtilizationPercentage() {
         return 0;
     }
 

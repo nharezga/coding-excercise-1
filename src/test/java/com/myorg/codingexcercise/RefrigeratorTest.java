@@ -56,6 +56,15 @@ public class RefrigeratorTest {
         Item smallItem2 = new Item("mayo", 10);
         Item smallItem3 = new Item("ginger-ale", 15);
         Item smallItem4 = new Item("bbq-sauce", 10);
+             
+        refrigerator.put(largeItem1);
+        refrigerator.put(largeItem2);        
+        refrigerator.put(largeItem4);
+                
+        refrigerator.put(smallItem1);
+        refrigerator.put(smallItem2);
+        refrigerator.put(smallItem3);
+        refrigerator.put(smallItem4);
 
         Assert.assertEquals(refrigerator.getUsedSpace(), 230);
 
