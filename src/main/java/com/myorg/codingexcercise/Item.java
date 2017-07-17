@@ -6,8 +6,8 @@ package com.myorg.codingexcercise;
  */
 public class Item {
 
-    String itemId;
-    int cubicFt;
+    private String itemId;
+    private int cubicFt;
 
     public Item(String itemId, int cubicFt) {
         this.itemId = itemId;
@@ -16,6 +16,10 @@ public class Item {
 
     public String getItemId() {
         return itemId;
+    }
+    
+    public int getCubicFt() {
+    	return cubicFt;
     }
 
 }
