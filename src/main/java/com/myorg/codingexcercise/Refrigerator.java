@@ -1,5 +1,8 @@
 package com.myorg.codingexcercise;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * You are about to build a Refrigerator which has SMALL, MEDIUM, and LARGE sized shelves.
@@ -39,6 +42,12 @@ public class Refrigerator {
     private int smallShelfCount;
     private int smallShelfCuFt;
 
+    // Track items in fridge
+    private List<Shelf> shelves;
+
+    // Total used space
+    private int usedCubicFt;
+
     /**
      *
      *  Create a new refrigerator by specifying shelfSize and count for SMALL, MEDIUM, LARGE shelves
@@ -66,7 +75,17 @@ public class Refrigerator {
         this.smallShelfCount = smallShelfCount;
         this.smallShelfCuFt = smallShelfCuFt;
 
+        shelves = new ArrayList<Shelf>();
 
+        // Arrange shelves small -> large to use the smallest possible shelf when inserting if possible
+        for(int i = 0; i < smallShelfCount; i++)
+            shelves.add(new Shelf(smallShelfCuFt));
+        for(int i = 0; i < mediumShelfCount; i++)
+           shelves.add(new Shelf(mediumShelfCuFt));
+        for(int i = 0; i < largeShelfCount; i++)
+           shelves.add(new Shelf(largeShelfCuFt));
+
+        usedCubicFt = 0;
     }
 
     /**
@@ -81,7 +100,58 @@ public class Refrigerator {
      *
      * @param item
      */
-    public boolean put(Item item) {
+    public boolean put(Item item)
+    {
+        // Check if there is enough room in the fridge for this item
+        if(item.getCubicFt() > cubicFt-usedCubicFt)
+            return false;   // TODO: Test for this
+
+        Shelf temp = null;
+        for(Shelf s : shelves)
+        {
+            if(item.getCubicFt() == s.getFreeFt())
+            {
+                s.addItem(item);
+                usedCubicFt += item.getCubicFt();
+                System.out.println("Found an exact match for " + item.getItemId());
+                return true;
+            }
+            else if(temp == null &&(item.getCubicFt() < s.getFreeFt()))
+                // record the smallest shelf this item will fit on
+                temp = s;
+        }
+        if(temp != null)
+        {
+            temp.addItem(item);
+            usedCubicFt += item.getCubicFt();
+            System.out.println("Found an inexact match for " + item.getItemId());
+            return true;
+        }
+        System.out.println("No match for " + item.getItemId());
+        return false;
+    }
+
+    public boolean put2(Item item) {
+        if(item.getCubicFt() > cubicFt-usedCubicFt)
+            return false;
+        else
+        {
+            // Attempt to insert into shelf without rearranging
+            for(Shelf s : shelves)
+            {
+                // Item will fit on this shelf without rearranging
+                if(s.getFreeFt() >= item.getCubicFt())
+                {
+                    s.addItem(item);
+                    usedCubicFt += item.getCubicFt();
+                    return true;
+                }
+            }
+
+            // Item didn't fit, need to rearrange
+            // TODO
+        }
+
         return false;
     }
 
@@ -93,7 +163,17 @@ public class Refrigerator {
      * @return
      */
     public Item get(String itemId) {
+// TODO: Test removing item that isn't there
+        Item i;
+        for(Shelf s : shelves)
+        {
+            if((i = s.removeItem(itemId)) != null)
+            {
+                usedCubicFt -= i.getCubicFt();
+                return i;
+            }
 
+        }
         return null;
 
     }
@@ -103,7 +183,7 @@ public class Refrigerator {
      * @return
      */
     public float getUtilizationPercentage() {
-        return 0;
+        return ((float)cubicFt/usedCubicFt)*100;
     }
 
     /**
@@ -111,7 +191,7 @@ public class Refrigerator {
      * @return
      */
     public int getUsedSpace() {
-        return 0;
+        return usedCubicFt;
     }
 
 
