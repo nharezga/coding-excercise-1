@@ -1,7 +1,6 @@
 package com.myorg.codingexcercise;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -45,6 +44,8 @@ public class Refrigerator {
     // Track items in fridge
     private List<Shelf> shelves;
 
+    private TreeMap<Shelf, Integer> treeMap;
+
     // Total used space
     private int usedCubicFt;
 
@@ -76,14 +77,21 @@ public class Refrigerator {
         this.smallShelfCuFt = smallShelfCuFt;
 
         shelves = new ArrayList<Shelf>();
+        treeMap = new TreeMap<Shelf, Integer>(new FreeSpaceComp());
 
         // Arrange shelves small -> large to use the smallest possible shelf when inserting if possible
-        for(int i = 0; i < smallShelfCount; i++)
-            shelves.add(new Shelf(smallShelfCuFt));
-        for(int i = 0; i < mediumShelfCount; i++)
-           shelves.add(new Shelf(mediumShelfCuFt));
-        for(int i = 0; i < largeShelfCount; i++)
+       for(int i = 0; i < largeShelfCount; i++)
            shelves.add(new Shelf(largeShelfCuFt));
+//           treeMap.put(new Shelf(largeShelfCuFt), largeShelfCuFt);
+
+        for(int i = 0; i < mediumShelfCount; i++)
+//            treeMap.put(new Shelf(mediumShelfCuFt), mediumShelfCuFt);
+           shelves.add(new Shelf(mediumShelfCuFt));
+
+       for(int i = 0; i < smallShelfCount; i++)
+//           treeMap.put(new Shelf(smallShelfCuFt), smallShelfCuFt);
+           shelves.add(new Shelf(smallShelfCuFt));
+
 
         usedCubicFt = 0;
     }
@@ -116,7 +124,7 @@ public class Refrigerator {
                 System.out.println("Found an exact match for " + item.getItemId());
                 return true;
             }
-            else if(temp == null &&(item.getCubicFt() < s.getFreeFt()))
+            else if(/*temp == null &&*/(item.getCubicFt() < s.getFreeFt()))
                 // record the smallest shelf this item will fit on
                 temp = s;
         }
@@ -127,7 +135,44 @@ public class Refrigerator {
             System.out.println("Found an inexact match for " + item.getItemId());
             return true;
         }
-        System.out.println("No match for " + item.getItemId());
+        System.out.println("No match for " + item.getItemId() + ", attempting to rearrange");
+
+        return rearrange(item, 0);
+    }
+
+    private boolean rearrange(Item item, int listIdx)
+    {
+        // Iterate over list from large -> small and check if any items can fit on a different shelf
+        ListIterator<Shelf> listIterator = shelves.listIterator(listIdx);
+        if(listIdx >= shelves.size())
+            return false;
+        while(listIterator.hasNext())
+        {
+            Shelf s = listIterator.next();
+
+            // Check if the shelf has an item that can be removed to fit this item
+            ListIterator<Item> itemListIterator = s.getItems().listIterator();
+            while(itemListIterator.hasNext())
+            {
+                Item i = itemListIterator.next();
+                // Check if there is enough room for the item without rearranging
+                if(item.getCubicFt() <= s.getFreeFt())
+                {
+                    return true;
+                }
+                else if((s.getFreeFt() + i.getCubicFt() - item.getCubicFt()) <= s.getCubicFt())
+                {
+                    // this item can replace an item on current shelf
+                    if(rearrange(i, listIdx+1))
+                    {
+                        Item temp = get(i.getItemId());
+                        put(item);
+                        put(temp);
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -196,4 +241,15 @@ public class Refrigerator {
 
 
 
+}
+
+class FreeSpaceComp implements Comparator<Shelf>
+{
+    public int compare(Shelf s1, Shelf s2)
+    {
+        if(s1.getFreeFt() > s2.getFreeFt())
+            return 1;
+        else
+            return -1;
+    }
 }

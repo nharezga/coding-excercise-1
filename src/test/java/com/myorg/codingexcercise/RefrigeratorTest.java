@@ -89,22 +89,38 @@ public class RefrigeratorTest {
     @Test
     public void rearrangeTest()
     {
-        Refrigerator refrigerator = new Refrigerator(2, 100, 3, 40, 2, 20);
+        Refrigerator refrigerator = new Refrigerator(1, 100, 1, 40, 1, 20);
 
         // Total usage: 175
         Item largeItem1 = new Item("milk", 75);
-        Item largeItem2 = new Item("organic-milk", 50);
-        Item largeItem3 = new Item("large-soda", 90);
-        Item largeItem4 = new Item("large-yogurt", 45);
 
         // Total usage:
         Item mediumItem1 = new Item("eggs", 25);
-        Item mediumTest2 = new Item("medium-yogurt", 30);
-        Item mediumTest3 = new Item("cheese", 22);  // goes to large shelf
 
         Item smallItem1 = new Item("ketchup", 20);
-        Item smallItem2 = new Item("mayo", 10);
-        Item smallItem3 = new Item("ginger-ale", 15);  // should move eggs to large shelf
-        Item smallItem4 = new Item("bbq-sauce", 10);
+        Item smallItem2 = new Item("mayo", 20);
+        Item smallItem3 = new Item("ginger-ale", 20);
+        Item smallItem4 = new Item("hot-sauce", 15);
+
+        Assert.assertTrue(refrigerator.put(largeItem1));
+        Assert.assertTrue(refrigerator.put(smallItem1));
+        Assert.assertTrue(refrigerator.put(smallItem2));
+        Assert.assertTrue(refrigerator.put(smallItem3));
+        Assert.assertTrue(refrigerator.put(smallItem4));
+        Item item = refrigerator.get("mayo");
+        Assert.assertEquals(item.getItemId(), "mayo");
+        Assert.assertTrue(refrigerator.put(mediumItem1));
+
+        Assert.assertEquals(refrigerator.getUsedSpace(), 155);
+    }
+
+    @Test
+    public void itemTooBigTest()
+    {
+        Refrigerator refrigerator = new Refrigerator(2, 100, 3, 40, 2, 20);
+
+        Item tooBig = new Item("turkey", 150);
+
+        Assert.assertFalse(refrigerator.put(tooBig));
     }
 }
