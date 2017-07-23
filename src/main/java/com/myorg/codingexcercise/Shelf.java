@@ -22,21 +22,6 @@ public class Shelf
         return cubicFt;
     }
 
-    public void setCubicFt(int cubicFt)
-    {
-        this.cubicFt = cubicFt;
-    }
-
-    public int getUsedFt()
-    {
-        return usedFt;
-    }
-
-    public void setUsedFt(int usedFt)
-    {
-        this.usedFt = usedFt;
-    }
-
     public int getFreeFt()
     {
         return cubicFt - usedFt;
@@ -45,11 +30,6 @@ public class Shelf
     public List<Item> getItems()
     {
         return items;
-    }
-
-    public void setItems(List<Item> items)
-    {
-        this.items = items;
     }
 
     public Item removeItem(String id)
